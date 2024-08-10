@@ -18,7 +18,7 @@ jobs:
       run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ilanasm/ilanas-test:$(date +%s)
+      run: docker build . --file DockerFile --tag ilanasm/ilanas-test:$(date +%s)
 
     - name: Push the Docker image
       run: docker push ilanasm/ilanas-test:$(date +%s)
