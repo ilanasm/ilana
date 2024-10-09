@@ -14,13 +14,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: List files for debugging
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Listing contents:"
+        ls -R
+
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
     - name: Build the Docker image
       run: |
         IMAGE_TAG="ilanasm/ilanas-test:$(date +%Y-%m-%d)"
-        docker build . --file DockerFile --tag $IMAGE_TAG
+        docker build . --file Dockerfile --tag $IMAGE_TAG
     
     - name: Push the Docker image
       run: |
@@ -42,3 +49,4 @@ jobs:
         git add ilana/values.yaml
         git commit -m "Update Helm chart with image version $IMAGE_TAG"
         git push origin main
+
