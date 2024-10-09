@@ -9,11 +9,11 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
@@ -27,25 +27,15 @@ jobs:
         IMAGE_TAG="ilanasm/ilanas-test:$(date +%Y-%m-%d)"
         docker push $IMAGE_TAG
 
-    - name: Deploy to AWS EC2
-      env:
-        IMAGE_TAG: "ilanasm/ilanas-test:$(date +%Y-%m-%d)"
+    - name: Update Helm chart values
       run: |
         IMAGE_TAG="ilanasm/ilanas-test:$(date +%Y-%m-%d)"
-        echo "${{ secrets.AWS_EC2_SSH_KEY }}" > /tmp/aws_ec2_key.pem
-        chmod 600 /tmp/aws_ec2_key.pem
-        ssh -o StrictHostKeyChecking=no -i /tmp/aws_ec2_key.pem ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }} << EOF
-          echo "Deploying image: $IMAGE_TAG"
-          
-          # Ensure the user is part of the docker group
-          sudo usermod -aG docker $USER
-          
-          # Pull the new Docker image
-          sudo docker pull $IMAGE_TAG
-          
-          # Stop any running container based on the old image
-          sudo docker stop \$(sudo docker ps -q --filter ancestor=ilanasm/ilanas-test) || true
-          
-          # Run the new container
-          sudo docker run -d -p 80:80 $IMAGE_TAG
-        EOF
+        sed -i "s|repository: .*|repository: \"$IMAGE_TAG\"|" ./ilanas-website/values.yaml
+
+    - name: Commit updated Helm chart
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        git add ./ilanas-website/values.yaml
+        git commit -m "Update Helm chart with image version $IMAGE_TAG"
+        git push
