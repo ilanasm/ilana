@@ -39,6 +39,6 @@ jobs:
         git config --global user.email "you@example.com"
         git config --global user.name "Your Name"
         git remote set-url origin https://$GH_PAT@github.com/ilanasm/ilana.git
-        git add ./ilana/values.yaml
+        git add ilana/values.yaml
         git commit -m "Update Helm chart with image version $IMAGE_TAG"
         git push origin main
