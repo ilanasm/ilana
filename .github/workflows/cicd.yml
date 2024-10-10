@@ -32,13 +32,13 @@ jobs:
         IMAGE_TAG="ilanasm/ilanas-test:$(date +%Y-%m-%d)"
         sed -i "s|repository: .*|repository: \"$IMAGE_TAG\"|" ./ilana/values.yaml
 
-    - name: Commit updated Helm chart
-      env:
-        GH_PAT: "${{ secrets.GIT_AT }}"
-      run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-        git remote set-url origin https://$GH_PAT@github.com/ilanasm/ilana.git
-        git add ilana/values.yaml
-        git commit -m "Update Helm chart with image version $IMAGE_TAG"
-        git push origin main
+    #- name: Commit updated Helm chart
+      #env:
+        #GH_PAT: "${{ secrets.GIT_AT }}"
+      #run: |
+        #git config --global user.email "you@example.com"
+        #git config --global user.name "Your Name"
+        #git remote set-url origin https://$GH_PAT@github.com/ilanasm/ilana.git
+        #git add ilana/values.yaml
+        #git commit -m "Update Helm chart with image version $IMAGE_TAG"
+        #git push origin main
