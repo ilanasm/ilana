@@ -2,14 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "ilanas-website.fullname" . }}
-  labels:
-    {{- include "ilanas-website.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: LoadBalancer
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: 80
+      targetPort: {{ .Values.service.port }}
       protocol: TCP
-      name: http
   selector:
-    {{- include "ilanas-website.selectorLabels" . | nindent 4 }}
+    app: {{ include "ilanas-website.fullname" . }}
