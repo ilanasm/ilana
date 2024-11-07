@@ -29,8 +29,8 @@ jobs:
     - name: Update Helm chart values
       run: |
         IMAGE_TAG="ilanasm/ilanas-test:$(date +%Y-%m-%d)"
-        sed -i "s|repository: .*|repository: \"$IMAGE_TAG\"|" ./ilana/values.yaml
-
+        sed -i "s|repository: .*|repository: \"ilanasm/ilanas-test\"|" ./ilana/values.yaml
+        sed -i "s|tag: .*|tag: \"$(date +%Y-%m-%d)\"|" ./ilana/values.yaml
     #- name: Commit updated Helm chart
       #env:
         #GH_PAT: "${{ secrets.GIT_AT }}"
