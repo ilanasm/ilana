@@ -1,0 +1,19 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the app code and install dependencies
+COPY app/ /app
+RUN pip install flask
+
+# Define environment variables for port and hostname
+ENV PORT=5000
+
+# Expose the port
+EXPOSE $PORT
+
+# Run the application
+CMD ["python", "app.py"]
+
