@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "flask_cluster" {
 }
 
 # ECR Repository
-resource "aws_ecr_repository" "flask_api_repo" {
+data "aws_ecr_repository" "flask_api_repo" {
   name = "ilanas-flask-api"
 }
 
