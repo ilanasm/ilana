@@ -1,0 +1,45 @@
+name: Terraform Pipeline
+
+on:
+  push:
+    paths:
+      - 'ilanastf/**'   
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0  
+
+      # Step 3: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 4: Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./ilanastf
+
+      # Step 5: Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./ilanastf
+
+      # Step 6: Terraform Apply
+        # This automatically applies changes without manual approval
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./ilanastf
