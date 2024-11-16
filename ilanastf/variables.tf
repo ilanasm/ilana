@@ -14,14 +14,14 @@ variable "vpc_id" {
 }
 
 variable "public_subnets" {
-  description = "subnet-010984fc584567991,subnet-053dd78d5c5a4253a"
+  description = ["subnet-010984fc584567991" ,"subnet-053dd78d5c5a4253a"]
   type        = list(string)
 }
 
-variable "ecr_repository_name" {
-  description = "Name of the ECR repository"
-  default     = "ilanas-flask-api"
-}
+#variable "ecr_repository_name" {
+  #description = "Name of the ECR repository"
+  #default     = "ilanas-flask-api"
+#}
 
 variable "s3_bucket_name" {
   description = "Name of the S3 bucket for static content"
