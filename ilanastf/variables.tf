@@ -9,12 +9,12 @@ variable "aws_account_id" {
 }
 
 variable "vpc_id" {
-  description = "ID of the VPC where resources will be deployed"
+  description = "vpc-00cca0426394bdde3"
   type        = string
 }
 
 variable "public_subnets" {
-  description = "List of public subnet IDs"
+  description = "subnet-010984fc584567991,subnet-053dd78d5c5a4253a"
   type        = list(string)
 }
 
@@ -25,7 +25,7 @@ variable "ecr_repository_name" {
 
 variable "s3_bucket_name" {
   description = "Name of the S3 bucket for static content"
-  default     = "ilanas-flask-index"
+  default     = "terraform-state-ilanas"
 }
 
 variable "app_port" {
