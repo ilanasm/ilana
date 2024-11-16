@@ -3,7 +3,6 @@ terraform {
     bucket         = "terraform-state-ilanas"
     key            = "ecs-deployment/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-lock-table"
     encrypt        = true
   }
 }
