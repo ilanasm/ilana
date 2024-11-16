@@ -17,7 +17,7 @@ resource "aws_lb" "flask_lb" {
   name               = "flask-api-alb"
   load_balancer_type = "application"
   subnets            = var.public_subnets
-  security_groups    = [aws_security_group.alb_sg.id]
+  security_groups    = ["sg-0c43d7031899a4d19"]
 }
 
 # CloudFront Distribution
