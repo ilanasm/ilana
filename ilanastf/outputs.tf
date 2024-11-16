@@ -13,7 +13,7 @@ output "alb_dns_name" {
   value       = aws_lb.flask_lb.dns_name
 }
 
-output "cloudfront_domain_name" {
-  description = "CloudFront distribution domain name"
-  value       = aws_cloudfront_distribution.flask_distribution.domain_name
-}
+#output "cloudfront_domain_name" {
+  #description = "CloudFront distribution domain name"
+  #value       = aws_cloudfront_distribution.flask_distribution.domain_name
+#}
