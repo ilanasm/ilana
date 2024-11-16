@@ -35,7 +35,7 @@ jobs:
 
       # Step 5: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -lock=false
         working-directory: ./ilanastf
 
       # Step 6: Terraform Apply
