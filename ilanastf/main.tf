@@ -48,8 +48,8 @@ resource "aws_s3_bucket_policy" "logs_policy" {
         Action    = "s3:PutObject",
         Resource  = "${aws_s3_bucket.logs.arn}/*",
         Condition = {
-          StringEquals = {
-            "AWS:SourceAccount" = var.account_id
+          StringEquals: {
+            "AWS:SourceAccount": var.account_id
           }
         }
       }
