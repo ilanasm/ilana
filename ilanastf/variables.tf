@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "aws_account_id" {
-  description = "821594384510"
+  description = "The AWS account ID where resources are deployed"
   type        = string
 }
 
