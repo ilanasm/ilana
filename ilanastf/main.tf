@@ -21,10 +21,6 @@ resource "aws_lb" "flask_lb" {
 }
 
 # CloudFront Origin Access Identity (for S3)
-resource "aws_cloudfront_origin_access_identity" "s3_identity" {
-  comment = "Allow CloudFront to access the S3 bucket"
-}
-
 resource "aws_cloudfront_distribution" "flask_distribution" {
   enabled             = true
   default_root_object = "index.html"
@@ -97,7 +93,7 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
     }
   }
 
-  # Logging Configuration
+  # Logging
   logging_config {
     bucket = data.aws_s3_bucket.logs.bucket_domain_name
     prefix = "cloudfront/"
