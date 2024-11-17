@@ -53,7 +53,7 @@ resource "aws_s3_bucket_policy" "logs_policy" {
 
 # Reference Existing S3 Bucket for Static Content
 data "aws_s3_bucket" "flask_index" {
-  bucket = "ilanas-flask-index" # Replace with your bucket name
+  bucket = "terraform-state-ilanas" 
 }
 
 # CloudFront Distribution
