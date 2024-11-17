@@ -30,7 +30,6 @@ resource "aws_cloudfront_origin_access_identity" "s3_identity" {
 # S3 Bucket for Logs
 resource "aws_s3_bucket" "logs" {
   bucket = "ilanas-logs"
-  acl    = "log-delivery-write" # Enables CloudFront to write logs to this bucket
 }
 
 resource "aws_s3_bucket_policy" "logs_policy" {
@@ -46,12 +45,7 @@ resource "aws_s3_bucket_policy" "logs_policy" {
           Service = "cloudfront.amazonaws.com"
         },
         Action    = "s3:PutObject",
-        Resource  = "${aws_s3_bucket.logs.arn}/*",
-        Condition = {
-          StringEquals: {
-            "AWS:SourceAccount": "821594384510"
-          }
-        }
+        Resource  = "${aws_s3_bucket.logs.arn}/*"
       }
     ]
   })
