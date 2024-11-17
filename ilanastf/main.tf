@@ -22,10 +22,9 @@ resource "aws_lb" "flask_lb" {
 
 # CloudFront Origin Access Identity (for S3)
 resource "aws_cloudfront_origin_access_identity" "s3_identity" {
-  comment = "Allow CloudFront access to S3 bucket"
+  comment = "Allow CloudFront to access the S3 bucket"
 }
 
-# CloudFront Distribution
 resource "aws_cloudfront_distribution" "flask_distribution" {
   enabled             = true
   default_root_object = "index.html"
@@ -45,7 +44,7 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
 
   # Origin for S3 Bucket
   origin {
-    domain_name = aws_s3_bucket.flask_index.bucket_regional_domain_name
+    domain_name = data.aws_s3_bucket.flask_index.bucket_regional_domain_name
     origin_id   = "flask-s3-origin"
 
     s3_origin_config {
@@ -53,7 +52,7 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
     }
   }
 
-  # Default Cache Behavior for S3
+  # Default Cache Behavior for S3 Bucket
   default_cache_behavior {
     target_origin_id       = "flask-s3-origin"
     viewer_protocol_policy = "redirect-to-https"
@@ -98,10 +97,9 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
     }
   }
 
-  # Logging (Optional)
+  # Logging Configuration
   logging_config {
-    bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "cloudfront/"
-    include_cookies = false
+    bucket = data.aws_s3_bucket.logs.bucket_domain_name
+    prefix = "cloudfront/"
   }
 }
