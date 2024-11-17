@@ -5,7 +5,7 @@ output "ecs_cluster_id" {
 
 output "ecr_repository_url" {
   description = "ECR Repository URL"
-  value       = aws_ecr_repository.flask_api_repo.repository_url
+  value       = data.aws_ecr_repository.flask_api_repo.repository_url
 }
 
 output "alb_dns_name" {
