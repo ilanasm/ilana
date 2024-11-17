@@ -85,37 +85,9 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
   }
 
   # Default Cache Behavior for S3 Bucket
-  default_cache_behavior {
-    target_origin_id       = "flask-s3-origin"
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
-
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-  }
 
   # Cache Behavior for API (/v1/*)
-  cache_behavior {
-    path_pattern           = "/v1/*"
-    target_origin_id       = "flask-api-origin"
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
 
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "all"
-      }
-    }
-  }
 
   # Viewer Certificate
   viewer_certificate {
