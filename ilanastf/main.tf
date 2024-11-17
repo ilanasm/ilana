@@ -20,7 +20,43 @@ resource "aws_lb" "flask_lb" {
   security_groups    = ["sg-0c43d7031899a4d19"]
 }
 
-# CloudFront Origin Access Identity (for S3)
+# CloudFront Setup with Logging and S3 Integration
+
+# CloudFront Origin Access Identity
+resource "aws_cloudfront_origin_access_identity" "s3_identity" {
+  comment = "Allow CloudFront to access the S3 bucket"
+}
+
+# S3 Bucket for Logs
+resource "aws_s3_bucket" "logs" {
+  bucket = "ilanas-logs"
+}
+
+resource "aws_s3_bucket_policy" "logs_policy" {
+  bucket = aws_s3_bucket.logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontLogging"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action    = "s3:PutObject"
+        Resource  = "${aws_s3_bucket.logs.arn}/*"
+      }
+    ]
+  })
+}
+
+# Reference Existing S3 Bucket for Static Content
+data "aws_s3_bucket" "flask_index" {
+  bucket = "ilanas-flask-index" # Replace with your bucket name
+}
+
+# CloudFront Distribution
 resource "aws_cloudfront_distribution" "flask_distribution" {
   enabled             = true
   default_root_object = "index.html"
@@ -95,7 +131,7 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
 
   # Logging
   logging_config {
-    bucket = data.aws_s3_bucket.logs.bucket_domain_name
+    bucket = aws_s3_bucket.logs.bucket_domain_name
     prefix = "cloudfront/"
   }
 }
