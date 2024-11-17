@@ -14,7 +14,7 @@ variable "vpc_id" {
 }
 
 variable "public_subnets" {
-  description = ["subnet-010984fc584567991" ,"subnet-053dd78d5c5a4253a"]
+  description = "List of public subnet IDs for the ALB"
   type        = list(string)
 }
 
