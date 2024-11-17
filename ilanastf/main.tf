@@ -116,8 +116,8 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
   }
 
   # Logging
-  logging_config {
-    bucket = aws_s3_bucket.logs.bucket_domain_name
-    prefix = "cloudfront/"
-  }
+  #logging_config {
+    #bucket = aws_s3_bucket.logs.bucket_domain_name
+    #prefix = "cloudfront/"
+  #}
 }
