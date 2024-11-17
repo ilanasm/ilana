@@ -49,7 +49,7 @@ resource "aws_s3_bucket_policy" "logs_policy" {
         Resource  = "${aws_s3_bucket.logs.arn}/*",
         Condition = {
           StringEquals: {
-            "AWS:SourceAccount": var.account_id
+            "AWS:SourceAccount": "821594384510"
           }
         }
       }
