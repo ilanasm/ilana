@@ -190,4 +190,5 @@ resource "aws_ecs_service" "flask_service" {
     container_name   = "flask-api"
     container_port   = 5000
   }
+ }
 }
