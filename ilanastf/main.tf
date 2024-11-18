@@ -20,6 +20,34 @@ resource "aws_lb" "flask_lb" {
   security_groups    = ["sg-0c43d7031899a4d19"]
 }
 
+# Target Group for ALB
+resource "aws_lb_target_group" "flask_target_group" {
+  name     = "flask-api-target-group"
+  port     = 5000
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path                = "/v1/health"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+}
+
+# Listener for ALB
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.flask_lb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.flask_target_group.arn
+  }
+}
+
 # CloudFront Setup with Logging and S3 Integration
 
 # CloudFront Origin Access Identity
@@ -100,9 +128,6 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
     }
   }
 
-  # Cache Behavior for API (/v1/*)
-
-
   # Viewer Certificate
   viewer_certificate {
     cloudfront_default_certificate = true
@@ -114,10 +139,4 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
       restriction_type = "none"
     }
   }
-
-  # Logging
-  #logging_config {
-    #bucket = aws_s3_bucket.logs.bucket_domain_name
-    #prefix = "cloudfront/"
-  #}
 }
