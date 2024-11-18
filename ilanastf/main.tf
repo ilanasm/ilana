@@ -94,7 +94,7 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
   default_root_object = "index.html"
 
   # Origin for ECS (via ALB)
-  origin {
+origin {
     domain_name = aws_lb.flask_lb.dns_name
     origin_id   = "flask-api-origin"
 
@@ -104,8 +104,9 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+  
   } # Closing the origin block properly
-  }
+  
 
   # Origin for S3 Bucket
   origin {
