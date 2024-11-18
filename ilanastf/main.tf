@@ -25,6 +25,7 @@ resource "aws_lb_target_group" "flask_target_group" {
   name     = "flask-api-target-group"
   port     = 5000
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = "vpc-00cca0426394bdde3"
 
   health_check {
