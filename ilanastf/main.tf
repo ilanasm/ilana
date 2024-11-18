@@ -48,6 +48,50 @@ resource "aws_lb_listener" "http_listener" {
   }
 }
 
+# ECS Task Definition
+resource "aws_ecs_task_definition" "flask_task" {
+  family                   = "flask-api-task"
+  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+
+  container_definitions = jsonencode([{
+    name      = "flask-api"
+    image     = data.aws_ecr_repository.flask_api_repo.repository_url
+    cpu       = 256
+    memory    = 512
+    essential = true
+
+    portMappings = [{
+      containerPort = 5000
+      hostPort      = 5000
+      protocol      = "tcp"
+    }]
+  }])
+}
+
+# ECS Service
+resource "aws_ecs_service" "flask_service" {
+  name            = "flask-api-service"
+  cluster         = aws_ecs_cluster.flask_cluster.id
+  task_definition = aws_ecs_task_definition.flask_task.arn
+  desired_count   = 2
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.public_subnets
+    security_groups  = ["sg-0c43d7031899a4d19"]
+    assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.flask_target_group.arn
+    container_name   = "flask-api"
+    container_port   = 5000
+  }
+}
+
 # CloudFront Setup with Logging and S3 Integration
 
 # CloudFront Origin Access Identity
