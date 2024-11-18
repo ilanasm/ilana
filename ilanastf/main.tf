@@ -74,6 +74,11 @@ resource "aws_iam_policy_attachment" "ecs_execution_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# S3 Bucket for Static Content
+data "aws_s3_bucket" "flask_index" {
+  bucket = "terraform-state-ilanas"
+}
+
 # CloudFront Origin Access Identity
 resource "aws_cloudfront_origin_access_identity" "s3_identity" {
   comment = "Allow CloudFront to access the S3 bucket"
