@@ -49,8 +49,6 @@ resource "aws_lb_listener" "http_listener" {
 }
 
 # IAM Roles and Policies for ECS
-
-# Execution Role
 resource "aws_iam_role" "ecs_execution_role" {
   name = "ecsExecutionRole"
 
@@ -72,4 +70,35 @@ resource "aws_iam_policy_attachment" "ecs_execution_policy" {
   name       = "ecsExecutionPolicyAttachment"
   roles      = [aws_iam_role.ecs_execution_role.name]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# CloudFront Distribution
+resource "aws_cloudfront_distribution" "flask_distribution" {
+  enabled             = true
+  default_root_object = "index.html"
+
+  # Origin for ECS (via ALB)
+  origin {
+    domain_name = aws_lb.flask_lb.dns_name
+    origin_id   = "flask-api-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  # Viewer Certificate
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  # Restrictions
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
 }
