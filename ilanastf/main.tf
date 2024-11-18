@@ -104,7 +104,8 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
-  }
+  } # Closing the origin block properly
+}
 
   # Origin for S3 Bucket
   origin {
@@ -190,5 +191,4 @@ resource "aws_ecs_service" "flask_service" {
     container_name   = "flask-api"
     container_port   = 5000
   }
- }
 }
