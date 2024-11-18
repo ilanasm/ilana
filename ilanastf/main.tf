@@ -72,3 +72,4 @@ resource "aws_iam_policy_attachment" "ecs_execution_policy" {
   name       = "ecsExecutionPolicyAttachment"
   roles      = [aws_iam_role.ecs_execution_role.name]
   policy_arn = "arn:aws:iam::aws:pol"
+  }
