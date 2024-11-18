@@ -74,6 +74,15 @@ resource "aws_iam_policy_attachment" "ecs_execution_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# CloudFront Origin Access Identity
+resource "aws_cloudfront_origin_access_identity" "s3_identity" {
+  comment = "Allow CloudFront to access the S3 bucket"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "flask_distribution" {
   enabled             = true
@@ -92,9 +101,19 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
     }
   }
 
+  # Origin for S3 Bucket
+  origin {
+    domain_name = data.aws_s3_bucket.flask_index.bucket_regional_domain_name
+    origin_id   = "flask-s3-origin"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.s3_identity.cloudfront_access_identity_path
+    }
+  }
+
   # Default Cache Behavior
   default_cache_behavior {
-    target_origin_id       = "flask-api-origin"
+    target_origin_id       = "flask-s3-origin"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
