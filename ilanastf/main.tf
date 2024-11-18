@@ -105,7 +105,6 @@ resource "aws_cloudfront_distribution" "flask_distribution" {
       origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
-}
 
   # Origin for S3 Bucket
   origin {
