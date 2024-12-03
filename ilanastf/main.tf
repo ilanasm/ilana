@@ -37,17 +37,17 @@ resource "aws_lb_target_group" "flask_target_group" {
   }
 }
 
-# Listener for ALB
-#resource "aws_lb_listener" "http_listener" {
-  #load_balancer_arn = aws_lb.flask_lb.arn
-  #port              = 80
-  #protocol          = "HTTP"
+#Listener for ALB
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.flask_lb.arn
+  port              = 80
+  protocol          = "HTTP"
 
-  #default_action {
-    #type             = "forward"
-    #target_group_arn = aws_lb_target_group.flask_target_group.arn
-  #}
-#}
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.flask_target_group.arn
+  }
+}
 
 # IAM Roles and Policies for ECS
 
