@@ -69,11 +69,11 @@ resource "aws_iam_role" "ecs_execution_role" {
   })
 }
 
-resource "aws_iam_policy_attachment" "ecs_execution_policy" {
-  name       = "ecsExecutionPolicyAttachment"
-  roles      = [aws_iam_role.ecs_execution_role.name]
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
+  role       = aws_iam_role.ecs_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
 
 # S3 Bucket for Static Content
 data "aws_s3_bucket" "flask_index" {
